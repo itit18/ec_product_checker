@@ -1,0 +1,5 @@
+[general]
+SiteName = "オムニ7"
+SiteUrl = "http://7net.omni7.jp/detail/2110595636"
+Selecter = "#cart_whole > div.box01.boxInteractive.mod-productDetails3Column_colCartBtnWrap.u-marginBottom05 > ul > li > p > input"
+ChromeDriver = "/usr/local/Cellar/chromedriver/2.31/bin/chromedriver"
