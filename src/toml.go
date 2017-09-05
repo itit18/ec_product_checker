@@ -3,19 +3,25 @@
 package main
 
 import (
+	//"fmt"
 	"github.com/BurntSushi/toml"
 	"log"
 )
 
 type configStruct struct {
 	General generalConfig `toml:"general"`
+	Sites   []site        `toml:"site"`
 }
 
 type generalConfig struct {
 	ChromeDriver string
-	SiteName     string
-	SiteUrl      string
-	Selecter     string
+}
+
+type site struct {
+	SiteName        string
+	SiteUrl         string
+	Selecter        string
+	SolodOutMessage string
 }
 
 func main() {
@@ -24,6 +30,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	log.Print(config.Sites)
+	for _, s := range config.Sites {
+		log.Print(s.SiteName)
+	}
 
-	log.Print(config.General.SiteName)
 }

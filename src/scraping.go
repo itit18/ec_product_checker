@@ -10,32 +10,50 @@ import (
 	"github.com/aws/aws-sdk-go/service/sns"
 	"github.com/fedesog/webdriver"
 	"log"
-	"os"
 	"strings"
+	"time"
 )
 
 type configStruct struct {
+	General generalConfig `toml:"general"`
+	Sites   []siteConfig  `toml:"site"`
+}
+
+type generalConfig struct {
 	ChromeDriver string
 	SiteName     string
 	SiteUrl      string
 	Selecter     string
 }
 
-func setConfig(config *configStruct) {
-	config.SiteName = "オムニ7"
-	config.SiteUrl = "http://7net.omni7.jp/detail/2110595636"
-	config.Selecter = `#cart_whole > div.box01.boxInteractive.mod-productDetails3Column_colCartBtnWrap.u-marginBottom05 > ul > li > p > input`
-	config.ChromeDriver = "/usr/local/Cellar/chromedriver/2.31/bin/chromedriver"
+type siteConfig struct {
+	Name            string
+	Url             string
+	Selecter        string
+	SolodOutMessage string
 }
 
-func isSoldOut(domObject *goquery.Selection) bool {
-	text, exist_err := domObject.Attr("value")
-	if exist_err == false {
+func setConfig(config *configStruct) {
+	_, err := toml.DecodeFile("config.toml", &config)
+	if err != nil {
+		panic(err)
+	}
+
+	log.Print(config.General) //動作確認用
+}
+
+func isSoldOut(domObject *goquery.Selection, soldOutMessage string) bool {
+	text := ""
+	text = domObject.Text()
+	if text == "" { //売り切れ表示がinput要素のときがあるので
+		text, _ = domObject.Attr("value")
+	}
+	if text == "" {
 		panic("要素が見つかりません")
 	}
-	fmt.Println(text)
+	fmt.Println(text) //動作テスト用
 
-	if text == "在庫切れ" {
+	if text == soldOutMessage {
 		return true
 	}
 	return false
@@ -53,7 +71,7 @@ func sendNotice(message string) {
 	params := &sns.PublishInput{}
 	params.SetTopicArn(topicArn)
 	params.SetMessage(message)
-	_, err = svc.Publish(params)
+	_, err := svc.Publish(params)
 	if err != nil { // resp is now filled
 		panic("error")
 	}
@@ -61,7 +79,7 @@ func sendNotice(message string) {
 
 //WebDriver経由で指定サイトのソースを取得
 func fetchHtml(config *configStruct, url string) string {
-	chromeDriver := webdriver.NewChromeDriver(config.ChromeDriver)
+	chromeDriver := webdriver.NewChromeDriver(config.General.ChromeDriver)
 	err := chromeDriver.Start()
 	if err != nil {
 		panic(err)
@@ -74,16 +92,25 @@ func fetchHtml(config *configStruct, url string) string {
 	if err != nil {
 		panic(err)
 	}
-	session.Url(config.SiteUrl)
+	session.Url(url)
 	source, err := session.Source()
 	if err != nil {
 		panic(err)
 	}
 	defer session.Delete()
 	//ページの読み込み待ち
-	//time.Sleep(3 * time.Second)
+	time.Sleep(1 * time.Second)
 
 	return source
+}
+
+func fetchDom(source string, selecter string) *goquery.Selection {
+	r := strings.NewReader(source)
+	doc, err := goquery.NewDocumentFromReader(r)
+	if err != nil {
+		panic(err)
+	}
+	return doc.Find(selecter).First()
 }
 
 func main() {
@@ -91,19 +118,15 @@ func main() {
 	config := configStruct{}
 	setConfig(&config)
 
-	source := fetchHtml(&config, config.SiteUrl)
-	r := strings.NewReader(source)
-	doc, err := goquery.NewDocumentFromReader(r)
-	if err != nil {
-		panic(err)
-	}
+	for _, site := range config.Sites {
+		source := fetchHtml(&config, site.Url)
 
-	domObject := doc.Find(config.Selecter).First()
-	if isSoldOut(domObject) {
-		log.Print("在庫切れでした")
-		return // mainでreturnすると正常終了のステータスコードが帰らないので注意
+		domObject := fetchDom(source, site.Selecter)
+		if isSoldOut(domObject, site.SolodOutMessage) == false {
+			log.Print("在庫切れでした")
+		} else {
+			//通知処理
+			sendNotice(site.Name + " スイッチ在庫あり: " + site.Url)
+		}
 	}
-
-	//通知処理
-	sendNotice(config.SiteName + " スイッチ在庫あり: " + config.SiteUrl)
 }
