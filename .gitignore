@@ -17,4 +17,4 @@ vagrant/.vagrant
 vagrant/cookbooks/local-mode-cache
 
 go/*.log
-go/vendor
+go/src/vendor
