@@ -10,6 +10,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/sns"
 	"github.com/fedesog/webdriver"
 	"log"
+	"os"
+	"path/filepath"
 	"strings"
 	"time"
 )
@@ -34,7 +36,22 @@ type siteConfig struct {
 }
 
 func setConfig(config *configStruct) {
-	_, err := toml.DecodeFile("config.toml", &config)
+	appPath, _ := os.Executable()
+	configPath := [3]string{}
+	configPath[0] = "."
+	configPath[1] = os.Getenv("GOPATH") + "/src/config"
+	configPath[2] = filepath.Dir(appPath)
+
+	var err error
+	//いくつかのfilepath候補からconfigを探す
+	for _, path := range configPath {
+		log.Print(path)
+		_, err = toml.DecodeFile(path+"/config.toml", &config)
+		if err == nil {
+			break
+		}
+	}
+	//configが1つも見つからなければ強制終了
 	if err != nil {
 		panic(err)
 	}

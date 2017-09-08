@@ -16,5 +16,11 @@
 vagrant/.vagrant
 vagrant/cookbooks/local-mode-cache
 
-go/*.log
+*.log
 go/src/vendor
+go/pkg
+go/bin
+
+
+
+!.gitkeep
