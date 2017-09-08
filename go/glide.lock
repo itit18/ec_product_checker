@@ -1,0 +1,48 @@
+hash: a76fbe07f5925c14973851b146c36aca9be9216f8cf321e35bdd30cb93087b20
+updated: 2017-09-08T13:20:15.819383543+09:00
+imports:
+- name: github.com/andybalholm/cascadia
+  version: 349dd0209470eabd9514242c688c403c0926d266
+- name: github.com/aws/aws-sdk-go
+  version: fa78289ae88a6b6a59e326885edc00612ed265f3
+  subpackages:
+  - aws
+  - aws/awserr
+  - aws/awsutil
+  - aws/client
+  - aws/client/metadata
+  - aws/corehandlers
+  - aws/credentials
+  - aws/credentials/ec2rolecreds
+  - aws/credentials/endpointcreds
+  - aws/credentials/stscreds
+  - aws/defaults
+  - aws/ec2metadata
+  - aws/endpoints
+  - aws/request
+  - aws/session
+  - aws/signer/v4
+  - internal/shareddefaults
+  - private/protocol
+  - private/protocol/query
+  - private/protocol/query/queryutil
+  - private/protocol/rest
+  - private/protocol/xml/xmlutil
+  - service/sns
+  - service/sts
+- name: github.com/BurntSushi/toml
+  version: b26d9c308763d68093482582cea63d69be07a0f0
+- name: github.com/fedesog/webdriver
+  version: 6f14c445a22cbbd7a136733ac3bc0e91b97cd97a
+- name: github.com/go-ini/ini
+  version: c787282c39ac1fc618827141a1f762240def08a3
+- name: github.com/jmespath/go-jmespath
+  version: bd40a432e4c76585ef6b72d3fd96fb9b6dc7b68d
+- name: github.com/PuerkitoBio/goquery
+  version: e1271ee34c6a305e38566ecd27ae374944907ee9
+- name: golang.org/x/net
+  version: 66aacef3dd8a676686c7ae3716979581e8b03c47
+  subpackages:
+  - html
+  - html/atom
+testImports: []
