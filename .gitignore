@@ -20,7 +20,7 @@ vagrant/cookbooks/local-mode-cache
 go/src/vendor
 go/pkg
 go/bin
-
+go/src/config/config.toml
 
 
 !.gitkeep

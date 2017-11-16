@@ -15,7 +15,12 @@ import (
 )
 
 type configStruct struct {
+	General generalConfig `toml:"general"`
 	Sites []siteConfig `toml:"site"`
+}
+
+type generalConfig struct {
+	TopicArn string
 }
 
 type siteConfig struct {
@@ -79,7 +84,7 @@ func isSoldOut(domSelection *agouti.Selection, soldOutMessage string) bool {
 //通知処理 / AWS SNSを利用
 func sendNotice(message string) {
 	log.Print("メッセージを送信")
-	topicArn := "arn:aws:sns:ap-northeast-1:706437443163:notice_switch"
+	topicArn := config.General.TopicArn
 	sess := session.Must(session.NewSessionWithOptions(session.Options{
 		SharedConfigState: session.SharedConfigEnable,
 	}))
