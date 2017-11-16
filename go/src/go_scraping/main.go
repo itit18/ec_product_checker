@@ -4,33 +4,23 @@ package main
 
 import (
 	"fmt"
-	"github.com/BurntSushi/toml"
-	"github.com/PuerkitoBio/goquery"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/sns"
-	"github.com/fedesog/webdriver"
 	"log"
 	"os"
 	"path/filepath"
-	"strings"
-	"time"
+
+	"github.com/BurntSushi/toml"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/sns"
+	"github.com/sclevine/agouti"
 )
 
 type configStruct struct {
-	General generalConfig `toml:"general"`
-	Sites   []siteConfig  `toml:"site"`
-}
-
-type generalConfig struct {
-	ChromeDriver string
-	SiteName     string
-	SiteUrl      string
-	Selecter     string
+	Sites []siteConfig `toml:"site"`
 }
 
 type siteConfig struct {
 	Name            string
-	Url             string
+	URL             string
 	Selecter        string
 	SolodOutMessage string
 }
@@ -55,22 +45,32 @@ func setConfig(config *configStruct) {
 	if err != nil {
 		panic(err)
 	}
-
-	log.Print(config.General) //動作確認用
 }
 
-func isSoldOut(domObject *goquery.Selection, soldOutMessage string) bool {
-	text := ""
-	text = domObject.Text()
-	if text == "" { //売り切れ表示がinput要素のときがあるので
-		text, _ = domObject.Attr("value")
+func isSoldOut(domSelection *agouti.Selection, soldOutMessage string) bool {
+	text, err := domSelection.Text()
+	if err != nil {
+		panic("error")
 	}
-	if text == "" {
-		panic("要素が見つかりません")
+	value, err := domSelection.Attribute("value")
+	if err != nil {
+		panic("error")
 	}
-	fmt.Println(text) //動作テスト用
+	salesMassageSlice := []string{text, value}
+	salesMassage := ""
+	for _, v := range salesMassageSlice {
+		if len(v) > 0 {
+			salesMassage = v
+			break
+		}
+	}
+	if len(salesMassage) == 0 {
+		panic("error")
+	}
 
-	if text == soldOutMessage {
+	fmt.Println(salesMassage) //動作テスト用
+
+	if salesMassage == soldOutMessage {
 		return true
 	}
 	return false
@@ -95,55 +95,43 @@ func sendNotice(message string) {
 }
 
 //WebDriver経由で指定サイトのソースを取得
-func fetchHtml(config *configStruct, url string) string {
-	chromeDriver := webdriver.NewChromeDriver(config.General.ChromeDriver)
-	err := chromeDriver.Start()
-	if err != nil {
-		panic(err)
-	}
-	defer chromeDriver.Stop()
-
-	desired := webdriver.Capabilities{"Platform": "Mac"}
-	required := webdriver.Capabilities{}
-	session, err := chromeDriver.NewSession(desired, required)
-	if err != nil {
-		panic(err)
-	}
-	session.Url(url)
-	source, err := session.Source()
-	if err != nil {
-		panic(err)
-	}
-	defer session.Delete()
-	//ページの読み込み待ち
-	time.Sleep(1 * time.Second)
-
-	return source
+func startChrome() (*agouti.WebDriver, *agouti.Page) {
+	agoutiDriver := agouti.ChromeDriver()
+	agoutiDriver.Start()
+	//defer agoutiDriver.Stop()
+	page, _ := agoutiDriver.NewPage(agouti.Desired(agouti.Capabilities{
+		"chromeOptions": map[string][]string{
+			"args": []string{
+				"--headless",
+			},
+		},
+	}),
+	)
+	return agoutiDriver, page
 }
 
-func fetchDom(source string, selecter string) *goquery.Selection {
-	r := strings.NewReader(source)
-	doc, err := goquery.NewDocumentFromReader(r)
-	if err != nil {
-		panic(err)
-	}
-	return doc.Find(selecter).First()
+func fetchDom(page *agouti.Page, URL string, selecter string) *agouti.Selection {
+	log.Print(URL)
+	page.Navigate(URL)
+	log.Print(page.Title())
+
+	return page.Find(selecter)
 }
 
 func main() {
 	//設定値 / コンストラクタの設定と値の引き渡しのパターンがよくわからない…
 	config := configStruct{}
 	setConfig(&config)
+	driver, page := startChrome()
+	defer driver.Stop()
 
 	for _, site := range config.Sites {
-		source := fetchHtml(&config, site.Url)
-
-		domObject := fetchDom(source, site.Selecter)
-		if isSoldOut(domObject, site.SolodOutMessage) == false {
+		domSelection := fetchDom(page, site.URL, site.Selecter)
+		if isSoldOut(domSelection, site.SolodOutMessage) == false {
 			log.Print("在庫切れでした")
 		} else {
 			//通知処理
-			sendNotice(site.Name + " スイッチ在庫あり: " + site.Url)
+			sendNotice(site.Name + " スイッチ在庫あり: " + site.URL)
 		}
 	}
 }

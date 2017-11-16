@@ -1,5 +1,5 @@
 [general]
-ChromeDriver = "/usr/local/Cellar/chromedriver/2.31/bin/chromedriver"
+ChromeDriver = "/usr/local/bin/chromedriver"
 
 [[site]]
 Name = "オムニ7"
