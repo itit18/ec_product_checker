@@ -1,0 +1,865 @@
+[PHP]
+
+;;;;;;;;;;;;;;;;;;;;
+; php.ini Options  ;
+;;;;;;;;;;;;;;;;;;;;
+; Name for user-defined php.ini (.htaccess) files. Default is ".user.ini"
+;user_ini.filename = ".user.ini"
+
+; To disable this feature set this option to empty value
+;user_ini.filename =
+
+; TTL for user-defined php.ini files (time-to-live) in seconds. Default is 300 seconds (5 minutes)
+;user_ini.cache_ttl = 300
+
+;;;;;;;;;;;;;;;;;;;;
+; Language Options ;
+;;;;;;;;;;;;;;;;;;;;
+
+engine = On
+
+short_open_tag = Off
+
+asp_tags = Off
+
+precision = 14
+
+output_buffering = 4096
+
+;output_handler =
+
+zlib.output_compression = Off
+
+;zlib.output_compression_level = -1
+
+;zlib.output_handler =
+
+implicit_flush = Off
+
+unserialize_callback_func =
+
+serialize_precision = 17
+
+;open_basedir =
+
+disable_functions =
+
+disable_classes =
+
+;highlight.string  = #DD0000
+;highlight.comment = #FF9900
+;highlight.keyword = #007700
+;highlight.default = #0000BB
+;highlight.html    = #000000
+
+;ignore_user_abort = On
+
+;realpath_cache_size = 16k
+
+;realpath_cache_ttl = 120
+
+zend.enable_gc = On
+
+;zend.multibyte = Off
+
+;zend.script_encoding =
+
+;;;;;;;;;;;;;;;;;
+; Miscellaneous ;
+;;;;;;;;;;;;;;;;;
+
+expose_php = On
+
+;;;;;;;;;;;;;;;;;;;
+; Resource Limits ;
+;;;;;;;;;;;;;;;;;;;
+
+max_execution_time = 30
+
+max_input_time = 60
+
+;max_input_nesting_level = 64
+
+; max_input_vars = 1000
+
+memory_limit = 128M
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Error handling and logging ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;error_reporting = E_ALL & ~E_NOTICE & ~E_STRICT
+error_reporting = E_ALL&~(E_NOTICE|E_DEPRECATED|E_STRICT)
+
+display_errors = On
+display_startup_errors = Off
+
+log_errors = On
+log_errors_max_len = 1024
+
+ignore_repeated_errors = Off
+ignore_repeated_source = Off
+report_memleaks = On
+
+;report_zend_debug = 0
+
+track_errors = Off
+
+;xmlrpc_errors = 0
+;xmlrpc_error_number = 0
+
+html_errors = Off
+
+;docref_root = "/phpmanual/"
+
+; http://php.net/docref-ext
+;docref_ext = .html
+
+;error_prepend_string = "<span style='color: #ff0000'>"
+;error_append_string = "</span>"
+
+error_log = /var/log/php_errors.log
+
+;;;;;;;;;;;;;;;;;
+; Data Handling ;
+;;;;;;;;;;;;;;;;;
+
+;arg_separator.output = "&amp;"
+
+;arg_separator.input = ";&"
+
+variables_order = "GPCS"
+
+request_order = "GP"
+
+register_argc_argv = Off
+
+auto_globals_jit = On
+
+;enable_post_data_reading = Off
+
+post_max_size = 200M
+
+auto_prepend_file =
+
+auto_append_file =
+
+default_mimetype = "text/html"
+
+default_charset = "UTF8"
+
+;always_populate_raw_post_data = On
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+; Paths and Directories ;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; UNIX: "/path1:/path2"
+;include_path = ".:/usr/share/pear/PEAR"
+include_path = ".:/usr/share/pear"
+;
+
+doc_root =
+
+user_dir =
+
+; extension_dir = "./"
+; On windows:
+; extension_dir = "ext"
+
+enable_dl = Off
+
+;cgi.force_redirect = 1
+
+
+
+;cgi.fix_pathinfo=1
+
+;fastcgi.impersonate = 1
+
+;fastcgi.logging = 0
+
+;cgi.rfc2616_headers = 0
+
+;;;;;;;;;;;;;;;;
+; File Uploads ;
+;;;;;;;;;;;;;;;;
+
+file_uploads = On
+
+;upload_tmp_dir =
+
+upload_max_filesize = 200M
+max_file_uploads = 20
+
+;;;;;;;;;;;;;;;;;;
+; Fopen wrappers ;
+;;;;;;;;;;;;;;;;;;
+
+allow_url_fopen = On
+allow_url_include = Off
+
+;from="john@doe.com"
+
+;user_agent="PHP"
+
+default_socket_timeout = 60
+
+;auto_detect_line_endings = Off
+
+;;;;;;;;;;;;;;;;;;;;;;
+; Dynamic Extensions ;
+;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;
+; Module Settings ;
+;;;;;;;;;;;;;;;;;;;
+
+[CLI Server]
+; Whether the CLI web server uses ANSI color coding in its terminal output.
+cli_server.color = On
+
+[Date]
+; Defines the default timezone used by the date functions
+; http://php.net/date.timezone
+date.timezone = "Asia/Tokyo"
+
+; http://php.net/date.default-latitude
+;date.default_latitude = 31.7667
+
+; http://php.net/date.default-longitude
+;date.default_longitude = 35.2333
+
+; http://php.net/date.sunrise-zenith
+;date.sunrise_zenith = 90.583333
+
+; http://php.net/date.sunset-zenith
+;date.sunset_zenith = 90.583333
+
+[filter]
+; http://php.net/filter.default
+;filter.default = unsafe_raw
+
+; http://php.net/filter.default-flags
+;filter.default_flags =
+
+[iconv]
+;iconv.input_encoding = ISO-8859-1
+;iconv.internal_encoding = ISO-8859-1
+;iconv.output_encoding = ISO-8859-1
+
+[intl]
+;intl.default_locale =
+; This directive allows you to produce PHP errors when some error
+; happens within intl functions. The value is the level of the error produced.
+; Default is 0, which does not produce any errors.
+;intl.error_level = E_WARNING
+
+[sqlite]
+; http://php.net/sqlite.assoc-case
+;sqlite.assoc_case = 0
+
+[sqlite3]
+;sqlite3.extension_dir =
+
+[Pcre]
+;pcre.backtrack_limit=100000
+;pcre.recursion_limit=100000
+
+[Pdo]
+;pdo_odbc.connection_pooling=strict
+;pdo_odbc.db2_instance_name
+
+[Pdo_mysql]
+pdo_mysql.cache_size = 2000
+pdo_mysql.default_socket=
+
+[Phar]
+; http://php.net/phar.readonly
+;phar.readonly = On
+
+; http://php.net/phar.require-hash
+;phar.require_hash = On
+
+;phar.cache_list =
+
+[mail function]
+; For Win32 only.
+; http://php.net/smtp
+SMTP = localhost
+; http://php.net/smtp-port
+smtp_port = 25
+
+; For Win32 only.
+; http://php.net/sendmail-from
+;sendmail_from = me@example.com
+
+; For Unix only.  You may supply arguments as well (default: "sendmail -t -i").
+; http://php.net/sendmail-path
+sendmail_path = /usr/sbin/sendmail -t -i
+mail.add_x_header = On
+
+
+[SQL]
+; http://php.net/sql.safe-mode
+sql.safe_mode = Off
+
+[ODBC]
+; http://php.net/odbc.default-db
+;odbc.default_db    =  Not yet implemented
+
+; http://php.net/odbc.default-user
+;odbc.default_user  =  Not yet implemented
+
+; http://php.net/odbc.default-pw
+;odbc.default_pw    =  Not yet implemented
+
+; Controls the ODBC cursor model.
+; Default: SQL_CURSOR_STATIC (default).
+;odbc.default_cursortype
+
+; Allow or prevent persistent links.
+; http://php.net/odbc.allow-persistent
+odbc.allow_persistent = On
+
+; Check that a connection is still valid before reuse.
+; http://php.net/odbc.check-persistent
+odbc.check_persistent = On
+
+; Maximum number of persistent links.  -1 means no limit.
+; http://php.net/odbc.max-persistent
+odbc.max_persistent = -1
+
+; Maximum number of links (persistent + non-persistent).  -1 means no limit.
+; http://php.net/odbc.max-links
+odbc.max_links = -1
+
+; Handling of LONG fields.  Returns number of bytes to variables.  0 means
+; passthru.
+; http://php.net/odbc.defaultlrl
+odbc.defaultlrl = 4096
+
+; Handling of binary data.  0 means passthru, 1 return as is, 2 convert to char.
+; See the documentation on odbc_binmode and odbc_longreadlen for an explanation
+; of odbc.defaultlrl and odbc.defaultbinmode
+; http://php.net/odbc.defaultbinmode
+odbc.defaultbinmode = 1
+
+;birdstep.max_links = -1
+
+[Interbase]
+; Allow or prevent persistent links.
+ibase.allow_persistent = 1
+
+; Maximum number of persistent links.  -1 means no limit.
+ibase.max_persistent = -1
+
+; Maximum number of links (persistent + non-persistent).  -1 means no limit.
+ibase.max_links = -1
+
+; Default database name for ibase_connect().
+;ibase.default_db =
+
+; Default username for ibase_connect().
+;ibase.default_user =
+
+; Default password for ibase_connect().
+;ibase.default_password =
+
+; Default charset for ibase_connect().
+;ibase.default_charset =
+
+; Default timestamp format.
+ibase.timestampformat = "%Y-%m-%d %H:%M:%S"
+
+; Default date format.
+ibase.dateformat = "%Y-%m-%d"
+
+; Default time format.
+ibase.timeformat = "%H:%M:%S"
+
+[MySQL]
+; Allow accessing, from PHP's perspective, local files with LOAD DATA statements
+; http://php.net/mysql.allow_local_infile
+mysql.allow_local_infile = On
+
+; Allow or prevent persistent links.
+; http://php.net/mysql.allow-persistent
+mysql.allow_persistent = On
+
+; If mysqlnd is used: Number of cache slots for the internal result set cache
+; http://php.net/mysql.cache_size
+mysql.cache_size = 2000
+
+; Maximum number of persistent links.  -1 means no limit.
+; http://php.net/mysql.max-persistent
+mysql.max_persistent = -1
+
+; Maximum number of links (persistent + non-persistent).  -1 means no limit.
+; http://php.net/mysql.max-links
+mysql.max_links = -1
+
+mysql.default_port =
+
+; Default socket name for local MySQL connects.  If empty, uses the built-in
+; MySQL defaults.
+; http://php.net/mysql.default-socket
+mysql.default_socket =
+
+; Default host for mysql_connect() (doesn't apply in safe mode).
+; http://php.net/mysql.default-host
+mysql.default_host =
+
+; Default user for mysql_connect() (doesn't apply in safe mode).
+; http://php.net/mysql.default-user
+mysql.default_user =
+
+mysql.default_password =
+
+; Maximum time (in seconds) for connect timeout. -1 means no limit
+; http://php.net/mysql.connect-timeout
+mysql.connect_timeout = 60
+
+; Trace mode. When trace_mode is active (=On), warnings for table/index scans and
+; SQL-Errors will be displayed.
+; http://php.net/mysql.trace-mode
+mysql.trace_mode = Off
+
+[MySQLi]
+
+; Maximum number of persistent links.  -1 means no limit.
+; http://php.net/mysqli.max-persistent
+mysqli.max_persistent = -1
+
+; Allow accessing, from PHP's perspective, local files with LOAD DATA statements
+; http://php.net/mysqli.allow_local_infile
+;mysqli.allow_local_infile = On
+
+; Allow or prevent persistent links.
+; http://php.net/mysqli.allow-persistent
+mysqli.allow_persistent = On
+
+; Maximum number of links.  -1 means no limit.
+; http://php.net/mysqli.max-links
+mysqli.max_links = -1
+
+; If mysqlnd is used: Number of cache slots for the internal result set cache
+; http://php.net/mysqli.cache_size
+mysqli.cache_size = 2000
+
+mysqli.default_port = 3306
+
+; Default socket name for local MySQL connects.  If empty, uses the built-in
+; MySQL defaults.
+; http://php.net/mysqli.default-socket
+mysqli.default_socket =
+
+; Default host for mysql_connect() (doesn't apply in safe mode).
+; http://php.net/mysqli.default-host
+mysqli.default_host =
+
+; Default user for mysql_connect() (doesn't apply in safe mode).
+; http://php.net/mysqli.default-user
+mysqli.default_user =
+
+; Default password for mysqli_connect() (doesn't apply in safe mode).
+; Note that this is generally a *bad* idea to store passwords in this file.
+; *Any* user with PHP access can run 'echo get_cfg_var("mysqli.default_pw")
+; and reveal this password!  And of course, any users with read access to this
+; file will be able to reveal the password as well.
+; http://php.net/mysqli.default-pw
+mysqli.default_pw =
+
+; Allow or prevent reconnect
+mysqli.reconnect = Off
+
+[mysqlnd]
+; Enable / Disable collection of general statistics by mysqlnd which can be
+; used to tune and monitor MySQL operations.
+; http://php.net/mysqlnd.collect_statistics
+mysqlnd.collect_statistics = On
+
+; Enable / Disable collection of memory usage statistics by mysqlnd which can be
+; used to tune and monitor MySQL operations.
+; http://php.net/mysqlnd.collect_memory_statistics
+mysqlnd.collect_memory_statistics = Off
+
+; Size of a pre-allocated buffer used when sending commands to MySQL in bytes.
+; http://php.net/mysqlnd.net_cmd_buffer_size
+;mysqlnd.net_cmd_buffer_size = 2048
+
+; Size of a pre-allocated buffer used for reading data sent by the server in
+; bytes.
+; http://php.net/mysqlnd.net_read_buffer_size
+;mysqlnd.net_read_buffer_size = 32768
+
+[OCI8]
+
+;oci8.privileged_connect = Off
+
+;oci8.max_persistent = -1
+
+;oci8.persistent_timeout = -1
+
+;oci8.ping_interval = 60
+
+;oci8.connection_class =
+
+;oci8.events = Off
+
+;oci8.statement_cache_size = 20
+
+;oci8.default_prefetch = 100
+
+;oci8.old_oci_close_semantics = Off
+
+[PostgreSQL]
+; Allow or prevent persistent links.
+; http://php.net/pgsql.allow-persistent
+pgsql.allow_persistent = On
+
+; Detect broken persistent links always with pg_pconnect().
+; Auto reset feature requires a little overheads.
+; http://php.net/pgsql.auto-reset-persistent
+pgsql.auto_reset_persistent = Off
+
+; Maximum number of persistent links.  -1 means no limit.
+; http://php.net/pgsql.max-persistent
+pgsql.max_persistent = -1
+
+; Maximum number of links (persistent+non persistent).  -1 means no limit.
+; http://php.net/pgsql.max-links
+pgsql.max_links = -1
+
+; Ignore PostgreSQL backends Notice message or not.
+; Notice message logging require a little overheads.
+; http://php.net/pgsql.ignore-notice
+pgsql.ignore_notice = 0
+
+; Log PostgreSQL backends Notice message or not.
+; Unless pgsql.ignore_notice=0, module cannot log notice message.
+; http://php.net/pgsql.log-notice
+pgsql.log_notice = 0
+
+[Sybase-CT]
+; Allow or prevent persistent links.
+; http://php.net/sybct.allow-persistent
+sybct.allow_persistent = On
+
+; Maximum number of persistent links.  -1 means no limit.
+; http://php.net/sybct.max-persistent
+sybct.max_persistent = -1
+
+; Maximum number of links (persistent + non-persistent).  -1 means no limit.
+; http://php.net/sybct.max-links
+sybct.max_links = -1
+
+; Minimum server message severity to display.
+; http://php.net/sybct.min-server-severity
+sybct.min_server_severity = 10
+
+; Minimum client message severity to display.
+; http://php.net/sybct.min-client-severity
+sybct.min_client_severity = 10
+
+; Set per-context timeout
+; http://php.net/sybct.timeout
+;sybct.timeout=
+
+;sybct.packet_size
+
+; The maximum time in seconds to wait for a connection attempt to succeed before returning failure.
+; Default: one minute
+;sybct.login_timeout=
+
+; The name of the host you claim to be connecting from, for display by sp_who.
+; Default: none
+;sybct.hostname=
+
+; Allows you to define how often deadlocks are to be retried. -1 means "forever".
+; Default: 0
+;sybct.deadlock_retry_count=
+
+[bcmath]
+; Number of decimal digits for all bcmath functions.
+; http://php.net/bcmath.scale
+bcmath.scale = 0
+
+[browscap]
+; http://php.net/browscap
+;browscap = extra/browscap.ini
+
+[Session]
+session.save_handler = files
+
+session.save_path = "/tmp"
+
+session.use_cookies = 1
+
+;session.cookie_secure =
+
+session.use_only_cookies = 1
+
+session.name = PHPSESSID
+
+session.auto_start = 0
+
+; Lifetime in seconds of cookie or, if 0, until browser is restarted.
+; http://php.net/session.cookie-lifetime
+session.cookie_lifetime = 604800
+
+; The path for which the cookie is valid.
+; http://php.net/session.cookie-path
+session.cookie_path = /
+
+; The domain for which the cookie is valid.
+; http://php.net/session.cookie-domain
+session.cookie_domain =
+
+; Whether or not to add the httpOnly flag to the cookie, which makes it inaccessible to browser scripting languages such as JavaScript.
+; http://php.net/session.cookie-httponly
+session.cookie_httponly =
+
+; Handler used to serialize data.  php is the standard serializer of PHP.
+; http://php.net/session.serialize-handler
+session.serialize_handler = php
+
+session.gc_probability = 100
+session.gc_divisor = 100
+
+session.gc_maxlifetime = 604800
+
+session.bug_compat_42 = Off
+
+session.bug_compat_warn = Off
+
+session.referer_check =
+
+; How many bytes to read from the file.
+; http://php.net/session.entropy-length
+;session.entropy_length = 32
+
+;session.entropy_file = /dev/urandom
+
+; Set to {nocache,private,public,} to determine HTTP caching aspects
+; or leave this empty to avoid sending anti-caching headers.
+; http://php.net/session.cache-limiter
+session.cache_limiter = nocache
+
+; Document expires after n minutes.
+; http://php.net/session.cache-expire
+session.cache_expire = 180
+
+session.use_trans_sid = 0
+
+session.hash_function = 0
+
+session.hash_bits_per_character = 5
+
+url_rewriter.tags = "a=href,area=href,frame=src,input=src,form=fakeentry"
+
+;session.upload_progress.enabled = On
+
+;session.upload_progress.cleanup = On
+
+;session.upload_progress.prefix = "upload_progress_"
+
+;session.upload_progress.name = "PHP_SESSION_UPLOAD_PROGRESS"
+
+;session.upload_progress.freq =  "1%"
+
+;session.upload_progress.min_freq = "1"
+
+[MSSQL]
+; Allow or prevent persistent links.
+mssql.allow_persistent = On
+
+; Maximum number of persistent links.  -1 means no limit.
+mssql.max_persistent = -1
+
+; Maximum number of links (persistent+non persistent).  -1 means no limit.
+mssql.max_links = -1
+
+; Minimum error severity to display.
+mssql.min_error_severity = 10
+
+; Minimum message severity to display.
+mssql.min_message_severity = 10
+
+; Compatibility mode with old versions of PHP 3.0.
+mssql.compatability_mode = Off
+
+; Connect timeout
+;mssql.connect_timeout = 5
+
+; Query timeout
+;mssql.timeout = 60
+
+; Valid range 0 - 2147483647.  Default = 4096.
+;mssql.textlimit = 4096
+
+; Valid range 0 - 2147483647.  Default = 4096.
+;mssql.textsize = 4096
+
+; Limits the number of records in each batch.  0 = all records in one batch.
+;mssql.batchsize = 0
+
+; Specify how datetime and datetim4 columns are returned
+; On => Returns data converted to SQL server settings
+; Off => Returns values as YYYY-MM-DD hh:mm:ss
+;mssql.datetimeconvert = On
+
+; Use NT authentication when connecting to the server
+mssql.secure_connection = Off
+
+; Specify max number of processes. -1 = library default
+; msdlib defaults to 25
+; FreeTDS defaults to 4096
+;mssql.max_procs = -1
+
+; Specify client character set.
+; If empty or not set the client charset from freetds.conf is used
+; This is only used when compiled with FreeTDS
+;mssql.charset = "ISO-8859-1"
+
+[Assertion]
+; Assert(expr); active by default.
+; http://php.net/assert.active
+;assert.active = On
+
+; Issue a PHP warning for each failed assertion.
+; http://php.net/assert.warning
+;assert.warning = On
+
+; Don't bail out by default.
+; http://php.net/assert.bail
+;assert.bail = Off
+
+; User-function to be called if an assertion fails.
+; http://php.net/assert.callback
+;assert.callback = 0
+
+; Eval the expression with current error_reporting().  Set to true if you want
+; error_reporting(0) around the eval().
+; http://php.net/assert.quiet-eval
+;assert.quiet_eval = 0
+
+[mbstring]
+; language for internal character representation.
+; http://php.net/mbstring.language
+mbstring.language = Japanese
+
+; internal/script encoding.
+; Some encoding cannot work as internal encoding.
+; (e.g. SJIS, BIG5, ISO-2022-*)
+; http://php.net/mbstring.internal-encoding
+mbstring.internal_encoding = UTF8
+
+; http input encoding.
+; http://php.net/mbstring.http-input
+mbstring.http_input = pass
+
+; http output encoding. mb_output_handler must be
+; registered as output buffer to function
+; http://php.net/mbstring.http-output
+mbstring.http_output = pass
+
+mbstring.encoding_translation = Off
+
+; http://php.net/mbstring.detect-order
+mbstring.detect_order = UTF-8,SJIS,EUC-JP,JIS,ASCII
+
+; substitute_character used when character cannot be converted
+; one from another
+; http://php.net/mbstring.substitute-character
+mbstring.substitute_character = none;
+
+;mbstring.func_overload = 0
+
+; enable strict encoding detection.
+mbstring.strict_detection = Off
+
+; This directive specifies the regex pattern of content types for which mb_output_handler()
+; is activated.
+; Default: mbstring.http_output_conv_mimetype=^(text/|application/xhtml\+xml)
+;mbstring.http_output_conv_mimetype=
+
+[gd]
+; Tell the jpeg decode to ignore warnings and try to create
+; a gd image. The warning will then be displayed as notices
+; disabled by default
+; http://php.net/gd.jpeg-ignore-warning
+;gd.jpeg_ignore_warning = 0
+
+[exif]
+; http://php.net/exif.encode-unicode
+;exif.encode_unicode = ISO-8859-15
+
+; http://php.net/exif.decode-unicode-motorola
+;exif.decode_unicode_motorola = UCS-2BE
+
+; http://php.net/exif.decode-unicode-intel
+;exif.decode_unicode_intel    = UCS-2LE
+
+; http://php.net/exif.encode-jis
+;exif.encode_jis =
+
+; http://php.net/exif.decode-jis-motorola
+;exif.decode_jis_motorola = JIS
+
+; http://php.net/exif.decode-jis-intel
+;exif.decode_jis_intel    = JIS
+
+[Tidy]
+; The path to a default tidy configuration file to use when using tidy
+; http://php.net/tidy.default-config
+;tidy.default_config = /usr/local/lib/php/default.tcfg
+
+; Should tidy clean and repair output automatically?
+; WARNING: Do not use this option if you are generating non-html content
+; such as dynamic images
+; http://php.net/tidy.clean-output
+tidy.clean_output = Off
+
+[soap]
+; Enables or disables WSDL caching feature.
+; http://php.net/soap.wsdl-cache-enabled
+soap.wsdl_cache_enabled=1
+
+; Sets the directory name where SOAP extension will put cache files.
+; http://php.net/soap.wsdl-cache-dir
+soap.wsdl_cache_dir="/tmp"
+
+; (time to live) Sets the number of second while cached file will be used
+; instead of original one.
+; http://php.net/soap.wsdl-cache-ttl
+soap.wsdl_cache_ttl=86400
+
+; Sets the size of the cache limit. (Max. number of WSDL files to cache)
+soap.wsdl_cache_limit = 5
+
+[sysvshm]
+; A default size of the shared memory segment
+;sysvshm.init_mem = 10000
+
+[ldap]
+; Sets the maximum number of open links or -1 for unlimited.
+ldap.max_links = -1
+
+[mcrypt]
+; For more information about mcrypt settings see http://php.net/mcrypt-module-open
+
+; Directory where to load mcrypt algorithms
+; Default: Compiled in into libmcrypt (usually /usr/local/lib/libmcrypt)
+;mcrypt.algorithms_dir=
+
+; Directory where to load mcrypt modes
+; Default: Compiled in into libmcrypt (usually /usr/local/lib/libmcrypt)
+;mcrypt.modes_dir=
+
+[dba]
+;dba.default_handler=
+
+; Local Variables:
+; tab-width: 4
+; End:

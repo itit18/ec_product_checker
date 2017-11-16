@@ -1,0 +1,14 @@
+[general]
+ChromeDriver = "/usr/local/bin/chromedriver"
+
+[[site]]
+Name = "オムニ7"
+Url = "http://7net.omni7.jp/detail/2110595636"
+Selecter = "#cart_whole > div.box01.boxInteractive.mod-productDetails3Column_colCartBtnWrap.u-marginBottom05 > ul > li > p > input"
+SoldOutMessage = "在庫切れ"
+
+[[site]]
+Name = "ヨドバシ"
+Url = "http://www.yodobashi.com/product/100000001003431565/"
+Selecter = "#js_buyBoxMain > ul > li > div > p"
+SoldOutMessage = "予定数の販売を終了しました"

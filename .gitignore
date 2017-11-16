@@ -12,3 +12,15 @@
 
 # Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
 .glide/
+
+vagrant/.vagrant
+vagrant/cookbooks/local-mode-cache
+
+*.log
+go/src/vendor
+go/pkg
+go/bin
+
+
+
+!.gitkeep
