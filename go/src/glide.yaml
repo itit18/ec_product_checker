@@ -10,3 +10,5 @@ import:
   - aws/session
   - service/sns
 - package: github.com/fedesog/webdriver
+- package: github.com/sclevine/agouti
+  version: ^2.0.0

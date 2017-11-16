@@ -3,29 +3,36 @@
 package main
 
 import (
-	"fmt"
-	"github.com/fedesog/webdriver"
+	"log"
+	"time"
+
+	"github.com/sclevine/agouti"
 )
 
 func main() {
-	path := "/usr/local/Cellar/chromedriver/2.31/bin/chromedriver"
-	chromeDriver := webdriver.NewChromeDriver(path)
-	err := chromeDriver.Start()
-	if err != nil {
-		fmt.Println(err)
-	}
-	desired := webdriver.Capabilities{"Platform": "Mac"}
-	required := webdriver.Capabilities{}
-	session, err := chromeDriver.NewSession(desired, required)
-	if err != nil {
-		fmt.Println("webdriber error!")
-	}
+	// ブラウザはChromeを指定して起動
+	// Chromeを利用することを宣言
+	agoutiDriver := agouti.ChromeDriver()
+	agoutiDriver.Start()
+	defer agoutiDriver.Stop()
+	//page, _ := agoutiDriver.NewPage()
+	page, _ := agoutiDriver.NewPage(agouti.Desired(agouti.Capabilities{
+		"chromeOptions": map[string][]string{
+			"args": []string{
+				"--headless",
+			},
+		},
+	}),
+	)
 
-	err = session.Url("http://golang.org")
-	if err != nil {
-		fmt.Println("get url error!")
-	}
-	session.Delete()
-	chromeDriver.Stop()
+	// 自動操作
+	page.Navigate("https://qiita.com/")
+	log.Print(page.Title())
+	//page.Screenshot("Screenshot01.png")
+
+	page.FindByLink("もっと詳しく").Click()
+	log.Print(page.Title())
+	//page.Screenshot("Screenshot02.png")
+	time.Sleep(3 * time.Second)
 
 }

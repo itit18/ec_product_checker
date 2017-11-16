@@ -1,10 +1,25 @@
-hash: a76fbe07f5925c14973851b146c36aca9be9216f8cf321e35bdd30cb93087b20
-updated: 2017-09-08T13:20:15.819383543+09:00
+hash: cb6faef8bcf94cb554237c1a51e3551d3520a262e8c3b39707af08ebad0ef727
+updated: 2017-11-15T19:28:52.253430409+09:00
 imports:
+- name: 9fans.net/go
+  version: f3da003977a315afefd8b0085cc48356fd2308a3
+  subpackages:
+  - acme
+  - plan9
+  - plan9/client
+- name: cloud.google.com/go
+  version: 19a9eb1910af48dc2554779d395ec0e417a9f063
+  subpackages:
+  - compute/metadata
+  - iam
+  - internal
+  - internal/optional
+  - internal/version
+  - storage
 - name: github.com/andybalholm/cascadia
   version: 349dd0209470eabd9514242c688c403c0926d266
 - name: github.com/aws/aws-sdk-go
-  version: fa78289ae88a6b6a59e326885edc00612ed265f3
+  version: 12a4975283c52e2fa88b0ae22882f83cf048eeb4
   subpackages:
   - aws
   - aws/awserr
@@ -32,17 +47,158 @@ imports:
   - service/sts
 - name: github.com/BurntSushi/toml
   version: b26d9c308763d68093482582cea63d69be07a0f0
+- name: github.com/cpuguy83/go-md2man
+  version: 1d903dcb749992f3741d744c0f8376b4bd7eb3e1
+  subpackages:
+  - md2man
+- name: github.com/fatih/camelcase
+  version: 44e46d280b43ec1531bb25252440e34f1b800b65
+- name: github.com/fatih/structtag
+  version: da3d9ab5b78fdc25d3a7614853b085200bd10da9
 - name: github.com/fedesog/webdriver
   version: 6f14c445a22cbbd7a136733ac3bc0e91b97cd97a
 - name: github.com/go-ini/ini
-  version: c787282c39ac1fc618827141a1f762240def08a3
+  version: 7e7da451323b6766da368f8a1e8ec9a88a16b4a0
+- name: github.com/golang/protobuf
+  version: 1e59b77b52bf8e4b449a57e6f79f21226d571845
+  subpackages:
+  - proto
+  - protoc-gen-go/descriptor
+  - ptypes
+  - ptypes/any
+  - ptypes/duration
+  - ptypes/timestamp
+- name: github.com/googleapis/gax-go
+  version: 317e0006254c44a0ac427cc52a0e083ff0b9622f
+- name: github.com/inconshreveable/mousetrap
+  version: 76626ae9c91c4f2a10f34cad8ce83ea42c93bb75
 - name: github.com/jmespath/go-jmespath
   version: bd40a432e4c76585ef6b72d3fd96fb9b6dc7b68d
+- name: github.com/mattn/go-colorable
+  version: 6fcc0c1fd9b620311d821b106a400b35dc95c497
+- name: github.com/mattn/go-isatty
+  version: 6ca4dbf54d38eea1a992b3c722a76a5d1c4cb25c
+- name: github.com/peterh/liner
+  version: a37ad39843113264dae84a5d89fcee28f50b35c6
 - name: github.com/PuerkitoBio/goquery
   version: e1271ee34c6a305e38566ecd27ae374944907ee9
-- name: golang.org/x/net
-  version: 66aacef3dd8a676686c7ae3716979581e8b03c47
+- name: github.com/russross/blackfriday
+  version: 6d1ef893fcb01b4f50cb6e57ed7df3e2e627b6b2
+- name: github.com/sclevine/agouti
+  version: b920a9cc753368454c642011939e1d7ec58e0024
+- name: github.com/spf13/cobra
+  version: 2da4a54c5ceefcee7ca5dd0eea1e18a3b6366489
   subpackages:
+  - doc
+- name: github.com/spf13/pflag
+  version: 4c012f6dcd9546820e378d0bdda4d8fc772cdfea
+- name: golang.org/x/arch
+  version: c319b3c35cc82ad104ce1308d983fdaed7a2fbcb
+  subpackages:
+  - x86/x86asm
+- name: golang.org/x/build
+  version: 172977016ac7156a541f3342d07afe5a18974392
+  subpackages:
+  - autocertcache
+- name: golang.org/x/crypto
+  version: 9f005a07e0d31d45e6656d241bb5c0f2efd4bc94
+  subpackages:
+  - acme
+  - acme/autocert
+- name: golang.org/x/net
+  version: a337091b0525af65de94df2eb7e98bd9962dcbe2
+  subpackages:
+  - context
+  - context/ctxhttp
   - html
   - html/atom
-testImports: []
+  - http2
+  - http2/hpack
+  - idna
+  - internal/timeseries
+  - lex/httplex
+  - trace
+  - websocket
+- name: golang.org/x/oauth2
+  version: 9ff8ebcc8e241d46f52ecc5bff0e5a2f2dbef402
+  subpackages:
+  - google
+  - internal
+  - jws
+  - jwt
+- name: golang.org/x/sys
+  version: bf42f188b9bc6f2cf5b8ee5a912ef1aedd0eba4c
+  subpackages:
+  - unix
+  - windows
+- name: golang.org/x/text
+  version: 88f656faf3f37f690df1a32515b479415e1a6769
+  subpackages:
+  - secure/bidirule
+  - transform
+  - unicode/bidi
+  - unicode/norm
+- name: google.golang.org/api
+  version: a0c31fb0028e0111b942a29b9fc2e9235202c48b
+  subpackages:
+  - gensupport
+  - googleapi
+  - googleapi/internal/uritemplates
+  - googleapi/transport
+  - internal
+  - iterator
+  - option
+  - storage/v1
+  - transport/http
+- name: google.golang.org/appengine
+  version: 9d8544a6b2c7df9cff240fcf92d7b2f59bc13416
+  subpackages:
+  - datastore
+  - internal
+  - internal/app_identity
+  - internal/base
+  - internal/datastore
+  - internal/log
+  - internal/memcache
+  - internal/modules
+  - internal/remote_api
+  - internal/urlfetch
+  - internal/user
+  - log
+  - memcache
+  - urlfetch
+  - user
+- name: google.golang.org/genproto
+  version: 11c7f9e547da6db876260ce49ea7536985904c9b
+  subpackages:
+  - googleapis/api/annotations
+  - googleapis/iam/v1
+  - googleapis/rpc/status
+- name: google.golang.org/grpc
+  version: c1fc29613da668384b9a63e81b424d627f0b0a02
+  subpackages:
+  - balancer
+  - balancer/roundrobin
+  - codes
+  - connectivity
+  - credentials
+  - encoding
+  - grpclb/grpc_lb_v1/messages
+  - grpclog
+  - internal
+  - keepalive
+  - metadata
+  - naming
+  - peer
+  - resolver
+  - resolver/dns
+  - resolver/passthrough
+  - stats
+  - status
+  - tap
+  - transport
+- name: gopkg.in/yaml.v2
+  version: eb3733d160e74a9c7e442f435eb3bea458e1d19f
+testImports:
+- name: github.com/pkg/profile
+  version: 5b67d428864e92711fcbd2f8629456121a56d91f
