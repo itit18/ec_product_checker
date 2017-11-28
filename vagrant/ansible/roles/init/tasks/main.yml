@@ -1,0 +1,25 @@
+#main.yml
+
+- name: yum update
+  become: yes
+  yum: name=* state=latest
+
+- name: install common pkg
+  yum: name={{item}} state=latest
+  with_items:
+    - vim
+    - zip
+    - unzip
+    - epel-release
+
+- name: add remi repo
+  shell: rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+  args:
+    creates: /etc/yum.repos.d/remi.repo
+
+# goのインストール
+- name: install go
+  yum:
+    name: golang
+    state: latest
+
