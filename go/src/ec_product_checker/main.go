@@ -3,7 +3,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -11,12 +10,13 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sns"
-	"github.com/sclevine/agouti"
+
+	"ec_product_checker/model/scraping"
 )
 
 type configStruct struct {
 	General generalConfig `toml:"general"`
-	Sites []siteConfig `toml:"site"`
+	Sites   []siteConfig  `toml:"site"`
 }
 
 type generalConfig struct {
@@ -52,39 +52,9 @@ func setConfig(config *configStruct) {
 	}
 }
 
-func isSoldOut(domSelection *agouti.Selection, soldOutMessage string) bool {
-	text, err := domSelection.Text()
-	if err != nil {
-		panic("error")
-	}
-	value, err := domSelection.Attribute("value")
-	if err != nil {
-		panic("error")
-	}
-	salesMassageSlice := []string{text, value}
-	salesMassage := ""
-	for _, v := range salesMassageSlice {
-		if len(v) > 0 {
-			salesMassage = v
-			break
-		}
-	}
-	if len(salesMassage) == 0 {
-		panic("error")
-	}
-
-	fmt.Println(salesMassage) //動作テスト用
-
-	if salesMassage == soldOutMessage {
-		return true
-	}
-	return false
-}
-
 //通知処理 / AWS SNSを利用
-func sendNotice(message string) {
+func sendNotice(message string, topicArn string) {
 	log.Print("メッセージを送信")
-	topicArn := config.General.TopicArn
 	sess := session.Must(session.NewSessionWithOptions(session.Options{
 		SharedConfigState: session.SharedConfigEnable,
 	}))
@@ -99,44 +69,20 @@ func sendNotice(message string) {
 	}
 }
 
-//WebDriver経由で指定サイトのソースを取得
-func startChrome() (*agouti.WebDriver, *agouti.Page) {
-	agoutiDriver := agouti.ChromeDriver()
-	agoutiDriver.Start()
-	//defer agoutiDriver.Stop()
-	page, _ := agoutiDriver.NewPage(agouti.Desired(agouti.Capabilities{
-		"chromeOptions": map[string][]string{
-			"args": []string{
-				"--headless",
-			},
-		},
-	}),
-	)
-	return agoutiDriver, page
-}
-
-func fetchDom(page *agouti.Page, URL string, selecter string) *agouti.Selection {
-	log.Print(URL)
-	page.Navigate(URL)
-	log.Print(page.Title())
-
-	return page.Find(selecter)
-}
-
 func main() {
 	//設定値 / コンストラクタの設定と値の引き渡しのパターンがよくわからない…
 	config := configStruct{}
 	setConfig(&config)
-	driver, page := startChrome()
+	driver, page := scraping.StartChrome()
 	defer driver.Stop()
 
 	for _, site := range config.Sites {
-		domSelection := fetchDom(page, site.URL, site.Selecter)
-		if isSoldOut(domSelection, site.SolodOutMessage) == false {
+		domSelection := scraping.FetchDom(page, site.URL, site.Selecter)
+		if scraping.IsSoldOut(domSelection, site.SolodOutMessage) == false {
 			log.Print("在庫切れでした")
 		} else {
 			//通知処理
-			sendNotice(site.Name + " スイッチ在庫あり: " + site.URL)
+			sendNotice(site.Name+" スイッチ在庫あり: "+site.URL, config.General.TopicArn)
 		}
 	}
 }
