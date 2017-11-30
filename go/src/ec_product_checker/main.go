@@ -65,7 +65,7 @@ func sendNotice(message string, topicArn string) {
 	params.SetMessage(message)
 	_, err := svc.Publish(params)
 	if err != nil { // resp is now filled
-		panic("error")
+		panic("SNSの通知処理に失敗しました")
 	}
 }
 

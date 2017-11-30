@@ -11,11 +11,11 @@ import (
 func IsSoldOut(domSelection *agouti.Selection, soldOutMessage string) bool {
 	text, err := domSelection.Text()
 	if err != nil {
-		panic("error")
+		panic("Domからのテキスト取得に失敗しました")
 	}
 	value, err := domSelection.Attribute("value")
 	if err != nil {
-		panic("error")
+		panic("Domからのvalue取得に失敗しました")
 	}
 	salesMassageSlice := []string{text, value}
 	salesMassage := ""
@@ -26,7 +26,7 @@ func IsSoldOut(domSelection *agouti.Selection, soldOutMessage string) bool {
 		}
 	}
 	if len(salesMassage) == 0 {
-		panic("error")
+		panic("販売状況テキストが取得できませんでした")
 	}
 
 	fmt.Println(salesMassage) //動作テスト用
