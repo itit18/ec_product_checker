@@ -1,0 +1,7 @@
+#playbook.yml
+
+- hosts: all
+  become: true
+  roles:
+    - init
+    - chrome

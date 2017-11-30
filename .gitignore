@@ -15,6 +15,7 @@
 
 vagrant/.vagrant
 vagrant/cookbooks/local-mode-cache
+vagrant/ansible/*.retry
 
 *.log
 go/src/vendor

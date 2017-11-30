@@ -1,0 +1,41 @@
+#main.yml
+# chrome用のyumリポジトリ作成 / yum_repositoryで作れる？
+- name: create chrome rep file
+  copy:
+    src: ../files/google-chrome.repo
+    dest: /etc/yum.repos.d/google-chrome.repo
+
+# chromeのインストール
+- name: install dependent package
+  yum: name={{ item }} state=latest
+  with_items:
+    - libX11
+    - GConf2
+    - fontconfig
+
+- name: install chrome
+  yum: name={{ item }} state=latest
+  with_items:
+    - google-chrome
+    - libOSMesa
+    - google-noto-cjk-fonts
+
+# chromedriverのインストール
+- name: download chromedriver
+  shell: wget https://chromedriver.storage.googleapis.com/2.33/chromedriver_linux64.zip
+  args:
+    chdir: /home/vagrant/
+    creates: chromedriver_linux64.zip
+
+- name: unzip chromedriver
+  shell: unzip chromedriver_linux64.zip
+  args:
+    chdir: /home/vagrant/
+    creates: /usr/local/bin/chromedriver
+
+- name: move chromedriver
+  shell: mv chromedriver /usr/local/bin
+  args:
+    chdir: /home/vagrant/
+    creates: /usr/local/bin/chromedriver
+
