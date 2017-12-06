@@ -3,7 +3,7 @@
 package main
 
 import (
-	"fmt"
+	"errors"
 	"log"
 	"os"
 	"path/filepath"
@@ -11,12 +11,13 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sns"
-	"github.com/sclevine/agouti"
+
+	"ec_product_checker/model/scraping"
 )
 
 type configStruct struct {
 	General generalConfig `toml:"general"`
-	Sites []siteConfig `toml:"site"`
+	Sites   []siteConfig  `toml:"site"`
 }
 
 type generalConfig struct {
@@ -30,7 +31,7 @@ type siteConfig struct {
 	SolodOutMessage string
 }
 
-func setConfig(config *configStruct) {
+func setConfig(config *configStruct) error {
 	appPath, _ := os.Executable()
 	configPath := [3]string{}
 	configPath[0] = "."
@@ -48,43 +49,15 @@ func setConfig(config *configStruct) {
 	}
 	//configが1つも見つからなければ強制終了
 	if err != nil {
-		panic(err)
-	}
-}
-
-func isSoldOut(domSelection *agouti.Selection, soldOutMessage string) bool {
-	text, err := domSelection.Text()
-	if err != nil {
-		panic("error")
-	}
-	value, err := domSelection.Attribute("value")
-	if err != nil {
-		panic("error")
-	}
-	salesMassageSlice := []string{text, value}
-	salesMassage := ""
-	for _, v := range salesMassageSlice {
-		if len(v) > 0 {
-			salesMassage = v
-			break
-		}
-	}
-	if len(salesMassage) == 0 {
-		panic("error")
+		return err
 	}
 
-	fmt.Println(salesMassage) //動作テスト用
-
-	if salesMassage == soldOutMessage {
-		return true
-	}
-	return false
+	return nil
 }
 
 //通知処理 / AWS SNSを利用
-func sendNotice(message string) {
+func sendNotice(message string, topicArn string) error {
 	log.Print("メッセージを送信")
-	topicArn := config.General.TopicArn
 	sess := session.Must(session.NewSessionWithOptions(session.Options{
 		SharedConfigState: session.SharedConfigEnable,
 	}))
@@ -95,48 +68,37 @@ func sendNotice(message string) {
 	params.SetMessage(message)
 	_, err := svc.Publish(params)
 	if err != nil { // resp is now filled
-		panic("error")
+		return errors.New("SNSの通知処理に失敗しました")
 	}
-}
 
-//WebDriver経由で指定サイトのソースを取得
-func startChrome() (*agouti.WebDriver, *agouti.Page) {
-	agoutiDriver := agouti.ChromeDriver()
-	agoutiDriver.Start()
-	//defer agoutiDriver.Stop()
-	page, _ := agoutiDriver.NewPage(agouti.Desired(agouti.Capabilities{
-		"chromeOptions": map[string][]string{
-			"args": []string{
-				"--headless",
-			},
-		},
-	}),
-	)
-	return agoutiDriver, page
-}
-
-func fetchDom(page *agouti.Page, URL string, selecter string) *agouti.Selection {
-	log.Print(URL)
-	page.Navigate(URL)
-	log.Print(page.Title())
-
-	return page.Find(selecter)
+	return nil
 }
 
 func main() {
 	//設定値 / コンストラクタの設定と値の引き渡しのパターンがよくわからない…
 	config := configStruct{}
-	setConfig(&config)
-	driver, page := startChrome()
+	err := setConfig(&config)
+	if err != nil {
+		log.Fatal(err)
+	}
+	driver, page := scraping.StartChrome()
 	defer driver.Stop()
 
 	for _, site := range config.Sites {
-		domSelection := fetchDom(page, site.URL, site.Selecter)
-		if isSoldOut(domSelection, site.SolodOutMessage) == false {
+		domSelection := scraping.FetchDom(page, site.URL, site.Selecter)
+		soldOut, err := scraping.IsSoldOut(domSelection, site.SolodOutMessage)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if soldOut == false {
 			log.Print("在庫切れでした")
 		} else {
 			//通知処理
-			sendNotice(site.Name + " スイッチ在庫あり: " + site.URL)
+			err := sendNotice(site.Name+" スイッチ在庫あり: "+site.URL, config.General.TopicArn)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 	}
 }
