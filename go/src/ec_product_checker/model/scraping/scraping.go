@@ -8,14 +8,14 @@ import (
 )
 
 //売り切れ判定
-func IsSoldOut(domSelection *agouti.Selection, soldOutMessage string) bool {
+func IsSoldOut(domSelection *agouti.Selection, soldOutMessage string) (bool, error) {
 	text, err := domSelection.Text()
 	if err != nil {
-		panic("Domからのテキスト取得に失敗しました")
+		return true, fmt.Errorf("Domからのテキスト取得に失敗しました: %v", err)
 	}
 	value, err := domSelection.Attribute("value")
 	if err != nil {
-		panic("Domからのvalue取得に失敗しました")
+		return true, fmt.Errorf("Domからのvalue取得に失敗しました: %v", err)
 	}
 	salesMassageSlice := []string{text, value}
 	salesMassage := ""
@@ -26,15 +26,15 @@ func IsSoldOut(domSelection *agouti.Selection, soldOutMessage string) bool {
 		}
 	}
 	if len(salesMassage) == 0 {
-		panic("販売状況テキストが取得できませんでした")
+		return true, fmt.Errorf("販売状況テキストが取得できませんでした: %v", err)
 	}
 
 	fmt.Println(salesMassage) //動作テスト用
 
 	if salesMassage == soldOutMessage {
-		return true
+		return true, nil
 	}
-	return false
+	return false, nil
 }
 
 //WebDriver経由で指定サイトのソースを取得

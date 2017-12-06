@@ -3,6 +3,7 @@
 package main
 
 import (
+	"errors"
 	"log"
 	"os"
 	"path/filepath"
@@ -30,7 +31,7 @@ type siteConfig struct {
 	SolodOutMessage string
 }
 
-func setConfig(config *configStruct) {
+func setConfig(config *configStruct) error {
 	appPath, _ := os.Executable()
 	configPath := [3]string{}
 	configPath[0] = "."
@@ -48,12 +49,14 @@ func setConfig(config *configStruct) {
 	}
 	//configが1つも見つからなければ強制終了
 	if err != nil {
-		panic(err)
+		return err
 	}
+
+	return nil
 }
 
 //通知処理 / AWS SNSを利用
-func sendNotice(message string, topicArn string) {
+func sendNotice(message string, topicArn string) error {
 	log.Print("メッセージを送信")
 	sess := session.Must(session.NewSessionWithOptions(session.Options{
 		SharedConfigState: session.SharedConfigEnable,
@@ -65,24 +68,37 @@ func sendNotice(message string, topicArn string) {
 	params.SetMessage(message)
 	_, err := svc.Publish(params)
 	if err != nil { // resp is now filled
-		panic("SNSの通知処理に失敗しました")
+		return errors.New("SNSの通知処理に失敗しました")
 	}
+
+	return nil
 }
 
 func main() {
 	//設定値 / コンストラクタの設定と値の引き渡しのパターンがよくわからない…
 	config := configStruct{}
-	setConfig(&config)
+	err := setConfig(&config)
+	if err != nil {
+		log.Fatal(err)
+	}
 	driver, page := scraping.StartChrome()
 	defer driver.Stop()
 
 	for _, site := range config.Sites {
 		domSelection := scraping.FetchDom(page, site.URL, site.Selecter)
-		if scraping.IsSoldOut(domSelection, site.SolodOutMessage) == false {
+		soldOut, err := scraping.IsSoldOut(domSelection, site.SolodOutMessage)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if soldOut == false {
 			log.Print("在庫切れでした")
 		} else {
 			//通知処理
-			sendNotice(site.Name+" スイッチ在庫あり: "+site.URL, config.General.TopicArn)
+			err := sendNotice(site.Name+" スイッチ在庫あり: "+site.URL, config.General.TopicArn)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 	}
 }
